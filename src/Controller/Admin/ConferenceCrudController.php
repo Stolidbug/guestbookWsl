@@ -24,9 +24,7 @@ class ConferenceCrudController extends AbstractCrudController
             'year',
             'city',
             'isInternational',
-            Field::new('comments')->hideOnDetail(),
-
-
+            
         ];
     }
 
