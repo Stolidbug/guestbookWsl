@@ -1,20 +1,52 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ConferenceController!{% endblock %}
-
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+    {% for message in app.flashes('message') %}
+        <div class="alert alert-success" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+    {% for message in app.flashes('warning') %}
+        <div class="alert alert-warning" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+    <section id="cover" class="cover">
+        <div class="cover-inner">
+            <div class="cover-catch">
+                <b>Bienvenue sur GuestBook,</b><br>
+            </div>
+        </div>
+    </section>
+    <section id="conferences_list">
+        <div class="container-fluid">
+            <div class="conferences-list" >
+                <div class="row"  id="conferences-container" >
+                    {% for conference in conferences %}
+                        <div class="col-xl-3 col-lg-4 col-md-6 col-xs-12 trick-info">
+                            <div class="conference-item">
+                                 <div class="conference-image">
+                                    <div class="embed-responsive embed-responsive-16by9">
+                                        <a class="embed-responsive-item" href="{{path('app_conference_show', {'id': conference.id})}}">
+                                            <img src="{{ asset('/uploads/' ~ conference.image )}}" alt="{{ conference.city }}">
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="conference-name">
+                                    <ul class="flex-row">
+                                        <li class="name">
+                                            <a href="{{path('app_conference_show', {'id': conference.id})}}">
+                                                {{ conference.city }}
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </section>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ '/home/stolidbug/Projet/guestbookWsl/src/Controller/ConferenceController.php'|file_link(0) }}">src/Controller/ConferenceController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/home/stolidbug/Projet/guestbookWsl/templates/conference/index.html.twig'|file_link(0) }}">templates/conference/index.html.twig</a></code></li>
-    </ul>
-</div>
 {% endblock %}

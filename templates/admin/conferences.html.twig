@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AdminController!{% endblock %}
+
+{%  block body %}
+    <section class="profile-content mb-3 mb-sm-5 pt-3 pt-sm-5">
+        <div class="container">
+            <div class="profile p-4">
+                <h1> Liste des Conferences </h1>
+                <table class="table">
+                    <thead>
+                    <th>ID</th>
+                    <th>ville</th>
+                    <th>Annes</th>
+                    <th>Commentaires</th>
+                    <th>Image</th>
+                    </thead>
+                    <tbody>
+                    {% for conference in conferences %}
+                        <tr>
+                            <td>{{ conference.id }}</td>
+                            <td>{{ conference.city }}</td>
+                            <td>{{ conference.year }}</td>
+                            <td>{{ conference.comments|length }}</td>
+                            <td>{{ conference.image|length }}</td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan=5> Il n'y a pas de confences</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+{% endblock %}

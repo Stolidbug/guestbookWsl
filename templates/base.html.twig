@@ -1,13 +1,92 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        {% block javascripts %}{% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-    </body>
+    <title>{% block title %}GuestBook{% endblock %}</title>
+
+    <link rel="icon" href="" sizes="16x16">
+
+    {% block stylesheets %}
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"
+              integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald:300,400,500,600,700">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.1/css/all.css">
+    {% endblock %}
+</head>
+
+<body id="top">
+
+<nav class="navbar navbar-expand-lg navbar-expand-md navbar-light bg-light d-none d-sm-flex" id="main-navbar">
+    <a class="navbar-brand" href="{{ path('app_admin_index') }}"><b>GuestBook</b></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="{{ path('conference') }}">Accueil <span class="sr-only">(current)</span></a>
+            </li>
+            {% if is_granted('ROLE_EDITOR') %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_admin_index') }}">Ajouter une conference</a>
+                </li>
+            {% endif %}
+            {% if is_granted('ROLE_ADMIN') %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_admin_index')}}">Admin</a>
+                </li>
+            {% endif %}
+            {% if is_granted('ROLE_USER') %}
+                    <a class="nav-link logout" href="{{ path("") }}">Déconnexion</a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_admin_index') }}">Se connecter</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_admin_index') }}">S'inscrire</a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
+
+<nav class="navbar navbar-light bg-light fixed-bottom d-block d-sm-none">
+    <div class="row text-center">
+        <div class="nav-item active col">
+            <a class="nav-link" href="{{ path('app_admin_index') }}"><i class="fas fa-home"></i></a>
+        </div>
+        <div class="nav-item col">
+            <a class="nav-link" href="{{ path('app_admin_index') }}#trick_list"><i class="fas fa-bookmark"></i></a>
+        </div>
+        {% if is_granted('ROLE_USER') %}
+            <div class="nav-item col">
+                <a class="nav-link logout" href="{{ path("app_admin_index") }}"><i class="fas fa-sign-out-alt"></i></a>
+            </div>
+        {% else %}
+            <div class="nav-item col">
+                <a class="nav-link" href="{{ path('app_admin_index') }}"><i class="fas fa-sign-in-alt"></i></a>
+            </div>
+        {% endif %}
+    </div>
+</nav>
+
+{% block body %}{% endblock %}
+
+<footer class="footer mb-sm-0">
+    <div class="container-fluid">
+        <span class="text-muted">Copyright © {{ 'now'|date('Y') }}</span>
+    </div>
+</footer>
+
+{% block javascripts %}
+    <script src="//code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+{% endblock %}
+</body>
 </html>

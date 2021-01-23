@@ -1,0 +1,25 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+
+    <section class="trick-content mb-3 mb-sm-5 pt-3 pt-sm-5">
+        <div class="container">
+            <div class="trick pb-4 px-2">
+                    <h1>Creation d'une conference !</h1>
+                <div class="px-4 pt-2">
+                    {{ form_start(formConference) }}
+                    {{ form_row(formConference.city, {'attr': {'placeholder': "ville de la confernce"}}) }}
+                    {{ form_row(formConference.year, {'attr': {'placeholder': "l'annee de la conference"}}) }}
+                    {{ form_row(formConference.image, {'attr': {'placeholder': "Images de la conference"}}) }}
+                </div>
+
+                <div class="col mt-4 text-right">
+                    <button type="submit" class="btn btn-dark mt-2">
+                            Enregistrer
+                    </button>
+                </div>
+                {{ form_end(formConference) }}
+            </div>
+        </div>
+    </section>
+{% endblock %}
