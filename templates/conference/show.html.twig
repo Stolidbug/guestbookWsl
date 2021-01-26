@@ -1,1 +1,86 @@
 {% extends 'base.html.twig' %}
+
+{% block body %}
+    <section class="trick-content mb-3 mb-sm-5 pt-3 pt-sm-5">
+        <div class="container">
+            <div class="trick-thumbnail" style="background-image:url('{{asset('uploads/' ~ conference.image)}}')">
+                {% if is_granted('ROLE_USER') %}
+                    <div class="trick-action">
+                        <div class="action-edit text-center">
+                            <a href="{{ path("app_trick_update",{ id: conference.id })}}">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                        </div>
+                        <div class="action-delete text-center">
+                            <a href="{{ path("app_conference_delete",{ id: conference.id }) }}">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="trick pb-4">
+                <div class="trick-name text-left text-sm-center">
+                    <span>{{ conference.city }}</span>
+                </div>
+            </div>
+
+                <div class="trick-description pt-4 px-4">
+                    <p class="text-justify">
+                        {{ conference.content }}
+                    </p>
+                </div>
+
+                <div class="trick-informations">
+                    <ul class="list-unstyled m-0 d-flex justify-content-center">
+                        <li class="mx-2">
+                            Ajouté le : {{ conference.createdAt|date("d/m/Y") }}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            {% if is_granted('ROLE_USER') %}
+                <div class="trick-comment-form py-4 mx-4 mt-4">
+                    <h2 class="page-header">Depose ton petit commentaire</h2>
+                    <div class="row justify-content-center">
+                        <div class="col-xl-7">
+                            {{ form_start(messageForm) }}
+                            {% if messageForm.author is defined %}
+                                {{ form_row(messageForm.author) }}
+                            {% endif %}
+                            {{ form_row(messageForm.content) }}
+                            <div class="text-center">
+                                <button type="submit" class="btn  btn-primary">Envoyer</button>
+                            </div>
+                            {{ form_end(messageForm) }}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+            <ul>
+                {% if not conference.comments.empty %}
+                <h2 class="page-header">Commentaires</h2>
+                <div class="trick-comments px-4">
+                    <div class="row justify-content-center">
+                        <div class="col-xl-7">
+                            <ul class="list-unstyled m-0" id="message-container">
+                                {% for comment in comments %}
+                                    <div class="container  trick-info">
+                                        <li class="comment-item media mt-4 {% if loop.index >= 6 %}hidden-comment{% endif %}">
+                                            <img class="mr-3 rounded" src="{{ asset('/uploads/' ~ message.user.image) }}" alt="">
+                                            <div class="media-body">
+                                                <h5 class="mt-0 mb-1">{{ comment.user.pseudo is not null ? comment.user.pseudo : comment.author  }}
+                                                    <small>{{ message.createdAt|date('Y-m-d H:i:s') }}</small></h5>
+                                                {{ message.content }}
+                                            </div>
+                                        </li>
+                                    </div>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </ul>
+    </section>
+{% endblock %}

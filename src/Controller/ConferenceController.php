@@ -61,7 +61,7 @@ class ConferenceController extends AbstractController
             } catch (\Exception $e) {
                 $this->addFlash('warning', 'une erreur est survenue :'.$e->getMessage());
 
-                return $this->redirectToRoute('app_app_home');
+                return $this->redirectToRoute('conference');
             }
             $this->addFlash('message', 'Felicition la conference est bien crée');
 
@@ -91,10 +91,10 @@ class ConferenceController extends AbstractController
     }
 
     /**
-     * @Route ("/conference/delete/{id}")
+     * @Route ("/delete/{id}")
      */
 
-    public function deleteConference(Conference $confe)
+    public function delete(Conference $confe)
     {
         try {
             $this->em->remove($confe);

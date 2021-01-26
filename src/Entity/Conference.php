@@ -49,6 +49,17 @@ class Conference
      */
     private $createdAt;
 
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $content;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="conferences")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $users;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
@@ -149,6 +160,30 @@ class Conference
     public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getContent(): ?string
+    {
+        return $this->content;
+    }
+
+    public function setContent(string $content): self
+    {
+        $this->content = $content;
+
+        return $this;
+    }
+
+    public function getUsers(): ?User
+    {
+        return $this->users;
+    }
+
+    public function setUsers(?User $users): self
+    {
+        $this->users = $users;
 
         return $this;
     }
