@@ -9,6 +9,7 @@ use App\Form\ConferenceType;
 use App\Service\FileUploader;
 use App\Repository\CommentRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -44,6 +45,7 @@ class ConferenceController extends AbstractController
 
     public function created(Request $request, FileUploader $fileUploader)
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
         $confe = new Conference();
         $form = $this->createForm(ConferenceType::class, $confe);
         $form->handleRequest($request);
@@ -78,17 +80,75 @@ class ConferenceController extends AbstractController
      * @Route("/conference/{id}")
      */
 
-    public function show(Conference $confe , CommentRepository $comme): Response
+    public function show(Conference $confe, Request $request,EntityManagerInterface $em): Response
     {
         $message = new Comment();
+        $comment = $em->getRepository(Comment::class)->findAll();
 
         $form = $this->createForm(CommentType::class, $message);
 
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $message->setCreatedAt(new \DateTime())
+                ->setAuthor($this->getUser()->getPseudo())
+                ->setUsers($this->getUser())
+                ->setConference($confe);
+
+            $this->em->persist($message);
+            $this->em->flush();
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($message);
+            $em->flush();
+
+            return $this->redirectToRoute('conference/show.html', [
+                'id' => $confe->getId(),
+            ]);
+        }
         return $this->render('conference/show.html.twig',[
             'conference' => $confe,
-            'comments' => $comme
+            'comments'=>$comment,
+            'messageForm' =>  $form->createView(),
         ]);
     }
+
+    /**
+     * @Route ("/update/{id}")
+     */
+
+    public function update(Conference $confe,Request $request, FileUploader $fileUploader)
+    {
+        $this->denyAccessUnlessGranted('EDIT', $confe);
+        $form = $this->createForm(ConferenceType::class, $confe);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+
+            if ($file = $form->get('file')->getData()) {
+                $fileName = $fileUploader->upload($file);
+                $confe->setImage($fileName);
+            }
+
+            $this->em->persist($confe);
+            $this->em->flush();
+
+            return $this->redirectToRoute('app_app_show',
+                ['id' => $confe->getId()]);
+        }
+
+        return $this->render('conference/create.html.twig', [
+            'formConference' => $form->createView(),
+            'conference' => $confe,
+            'editMode' => null !== $confe->getId(),
+        ]);
+    }
+
+
+
+
+
 
     /**
      * @Route ("/delete/{id}")
@@ -96,6 +156,7 @@ class ConferenceController extends AbstractController
 
     public function delete(Conference $confe)
     {
+        $this->denyAccessUnlessGranted('EDIT', $confe);
         try {
             $this->em->remove($confe);
             $this->em->flush();

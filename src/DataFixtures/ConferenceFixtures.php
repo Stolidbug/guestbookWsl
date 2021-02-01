@@ -27,7 +27,7 @@ class ConferenceFixtures extends Fixture implements DependentFixtureInterface
                       cruciatibus linguam iustitiam avulsam accusatorem avulsam et et ita tandem caelo audacem laceratus
                        diutius flagitaret membra fundato nec excarnificari quemquam pectore pertinacius qui mentiretur 
                        mansit quaedam diutius passus obtrectatorem.')
-                ->setImage(sprintf('%s', '44a50f07b4bdc57740901280f9eddaf5-600c9c94f3c8f.png'))
+                ->setImage(sprintf('%s', 'avatar.png'))
                 ->setCreatedAt(new \DateTime())
                 ->setUsers($this->getReference(sprintf('user-%d', ($j % 10) + 1)));
             $manager->persist($figure);

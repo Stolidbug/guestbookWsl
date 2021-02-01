@@ -1,0 +1,41 @@
+html {
+    height: 100%;
+    min-height: 100%;
+}
+
+body {
+    height: 100%;
+}
+
+button:focus,
+a:focus {
+    outline: none;
+}
+
+button,
+input.btn {
+    cursor: pointer;
+}
+
+.footer {
+    width: 100%;
+    height: 3.5rem;
+    line-height: 3.5rem;
+    background-color: #f8f9fa;
+    z-index: 10;
+    position: relative;
+    margin-bottom: 57px;
+    border-top: 1px solid #ced4da;
+}
+
+.navbar a.nav-link.logout {
+    color: #dc3545;
+}
+
+.navbar div.nav-item a {
+    color: #212529;
+}
+
+.navbar.fixed-bottom.bg-light {
+    border-top: 1px solid #ced4da;
+}
